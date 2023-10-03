@@ -11,7 +11,7 @@ $data['phone'] = $_POST['phone'] ?? null;
 $data['pass'] = $_POST['pass'] ?? null;
 
 if (empty($data['name']) || empty($data['work']) || empty($data['email']) || empty($data['phone'])) {
-	include __DIR__.'/src/form.html';
+	header('Location: form.php');
 	return;
 }
 
@@ -24,4 +24,4 @@ if(session_status() === PHP_SESSION_NONE) session_start();
 
 $img = (new AutoSignature($data['name'], $data['work'], $data['email'], $data['phone']))->genSignature();
 
-header('Location: /view_signature.php?img='.$img.'.jpeg');
+header('Location: view_signature.php?img='.$img.'.jpeg');

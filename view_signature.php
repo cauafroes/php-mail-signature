@@ -121,7 +121,7 @@ if (empty($img)) {
         </tr>
     </table>
     <br>
-    <img src="../footer.png">
+    <img src="footer.png">
     <br>
     <strong>IMPORTANTE:</strong>
     <br>
