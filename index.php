@@ -1,10 +1,10 @@
 <?php
 
-$name = $_POST['name'];
-$work = $_POST['funcao'];
-$email = $_POST['email'];
-$phone = $_POST['phone'];
-$pass = $_POST['pass'];
+$name = $_POST['name'] ?? null;
+$work = $_POST['funcao'] ?? null;
+$email = $_POST['email'] ?? null;
+$phone = $_POST['phone'] ?? null;
+$pass = $_POST['pass'] ?? null;
 
 if (!empty($name) && !empty($work) && !empty($email) && !empty($phone)) {
 
