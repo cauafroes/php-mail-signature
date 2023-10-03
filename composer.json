@@ -1,0 +1,21 @@
+{
+    "name": "froes/autosignature",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Froes\\Autosignature\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Cauã Fróes",
+            "email": "bkcauafroes2012@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "ext-gd": "*",
+        "php": "^8.0",
+        "ext-http": "*"
+    }
+}
