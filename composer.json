@@ -16,6 +16,6 @@
     "require": {
         "ext-gd": "*",
         "php": "^8.0",
-        "ext-http": "*"
+        "vlucas/phpdotenv": "^5.6"
     }
 }

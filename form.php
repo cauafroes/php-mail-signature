@@ -68,6 +68,9 @@
         <br>
 
         <label for="password">Senha</label>
+        <?php if(isset($_GET['error'])): ?>
+            <h5 style="color: #f50000; font-weight: normal; margin: 10px 0 10px 0;">Senha incorreta</h5>
+        <?php endif; ?>
         <input type="password" id="password" name="pass" placeholder="Qual a senha para utilizar este serviço?">
 
 		<input type="submit" value="Enviar">

@@ -2,16 +2,20 @@
 
 namespace Froes\Autosignature;
 
+use Dotenv\Dotenv;
+
 class AutoSignature{
     private string $name;
     private string $work;
     private string $email;
     private string $phone;
-    public function __construct($name, $work, $email, $phone){
+    private string $pass;
+    public function __construct($name, $work, $email, $phone, $pass){
         $this->name = $name;
         $this->work = $work;
         $this->email = $email;
         $this->phone = $phone;
+        $this->pass = $pass;
     }
 
     /**
@@ -26,8 +30,8 @@ class AutoSignature{
         imagefilledrectangle($gd, 0, 0, 423, 139, $colorWhite);
 
         //CARREGA FONTES
-	$font = './fonts/ubuntu.ttf';
-	$fontBold = './fonts/ubuntubold.ttf';
+        $font = './fonts/ubuntu.ttf';
+        $fontBold = './fonts/ubuntubold.ttf';
 
         //ESCREVE NA IMAGEM
         imagettftext($gd, 14, 0, 12, 35, $colorRed, $fontBold, $this->name);
@@ -38,11 +42,11 @@ class AutoSignature{
         imageline($gd, 12, 66, 390, 66, $colorRed);
 
         //SALVA IMAGEM
-	$fileName = str_replace(' ', '_', $this->name) . '_' . date('YmdHis') . '_' . rand(1000, 9999);
-	if (!file_exists('./images/')) {
-	    mkdir('./images/', 0777, true);
-	}
-	imagejpeg($gd, './images/'.$fileName.'.jpeg', 100);
+        $fileName = str_replace(' ', '_', $this->name) . '_' . date('YmdHis') . '_' . rand(1000, 9999);
+        if (!file_exists('./images/')) {
+            mkdir('./images/', 0777, true);
+        }
+        imagejpeg($gd, './images/'.$fileName.'.jpeg', 100);
         imagedestroy($gd);
 
         return $fileName;
