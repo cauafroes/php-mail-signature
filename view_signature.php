@@ -2,8 +2,20 @@
 $img = $_GET['img'] ?? null;
 
 if (empty($img)) {
-	echo 'Imagem não encontrada!';
+    http_response_code(404);
+    echo 'Imagem não encontrada!';
 	exit;
+}
+
+//protegendo de xss e outros ataques:
+//payload = img=aa.png" alt = "aa" onerror=alert('xss') a
+$img = htmlspecialchars($img, ENT_QUOTES);
+
+$file = __DIR__ . '/images/' . $img;
+if (!file_exists($file)) {
+    http_response_code(404);
+    echo 'Imagem não encontrada!';
+    exit;
 }
 
 ?>
@@ -45,13 +57,26 @@ if (empty($img)) {
             border-radius: 15px;
             text-align: left;
         }
+        .buttoncopy{
+            background-color: #3486d7;
+            border-radius: 10px;
+            border-color: #3486d7;
+            color: white;
+            padding: 5px 5px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
-<h4>Copie isto tudo abaixo (clique e vá arrastando até selecionar tudo) e cole em sua assinatura no outlook</h4>
+<h4>Clique <button class="buttoncopy" onclick="copyToClipboard()">aqui</button> para copiar a assinatura e cole nas configurações de assinatura do seu outlook</h4>
 <br>
 
-<div class="child">
+<div class="child" id="signature">
     <!--  infelizmente teve que ser em tabela, os emails tem dificuldade em mostrar padrões modernos, a maioria dos clientes de email ainda nao suportam display:flex, por exemplo   -->
     <table
             id="Tabela_01"
@@ -63,7 +88,7 @@ if (empty($img)) {
     >
         <tr>
             <td rowspan="2">
-                <a href="http://www.clubedeferias.com/">
+                <a href="https://www.clubedeferias.com/">
                     <img
                             src="https://clubedeferias.com/images/emails/clubelogo.png"
                             width="154"
@@ -72,7 +97,7 @@ if (empty($img)) {
                     /></a>
             </td>
             <td colspan="4">
-                <a href="http://www.clubedeferias.com/">
+                <a href="https://www.clubedeferias.com/">
                     <img
                             src="./images/<?= $img ?>"
                             width="333"
@@ -83,7 +108,7 @@ if (empty($img)) {
         </tr>
         <tr>
             <td>
-                <a href="http://www.instagram.com/oclubedeferias/">
+                <a href="https://www.instagram.com/oclubedeferias/">
                     <img
                             src="https://clubedeferias.com/images/emails/instalogo.png"
                             width="38"
@@ -92,7 +117,7 @@ if (empty($img)) {
                     /></a>
             </td>
             <td>
-                <a href="http://www.facebook.com/clubedeferiasstellabarros/">
+                <a href="https://www.facebook.com/clubedeferiasstellabarros/">
                     <img
                             src="https://clubedeferias.com/images/emails/facelogo.png"
                             width="32"
@@ -101,7 +126,7 @@ if (empty($img)) {
                     /></a>
             </td>
             <td>
-                <a href="http://www.youtube.com/channel/UC3cNLeggbFCbIT3zTcGocqw">
+                <a href="https://www.youtube.com/channel/UC3cNLeggbFCbIT3zTcGocqw">
                     <img
                             src="https://clubedeferias.com/images/emails/ytlogo.png"
                             width="31"
@@ -112,7 +137,7 @@ if (empty($img)) {
             <td>
                 <a href="https://grupoaguia.com.br/">
                     <img
-                            src="https://clubedeferias.com/images/emails/aguialogo.png"
+                            src="https://images-store.us-southeast-1.linodeobjects.com/images/bottom_sig.webp"
                             width="232"
                             height="44"
                             alt=""
@@ -121,7 +146,7 @@ if (empty($img)) {
         </tr>
     </table>
     <br>
-    <img src="footer.png">
+    <img src="footer.png" alt="">
     <br>
     <strong>IMPORTANTE:</strong>
     <br>
@@ -144,5 +169,30 @@ if (empty($img)) {
     Furthermore, you are hereby notified to refrain from disclosing, copying, distributing, examining or, in any way, using the information contained in this message, considered to be unlawfull.
 </div>
 
+
+<script>
+    //copiar tudo ao clicar
+    function copyToClipboard() {
+        let container = document.getElementById('signature');
+
+        if (!navigator.clipboard){
+            let range = document.createRange();
+            window.getSelection().removeAllRanges();
+            range.selectNode(container);
+            window.getSelection().addRange(range);
+            document.execCommand('copy');
+            window.getSelection().removeAllRanges();
+            alert("Copiado para a área de transferência!");
+        } else{
+            navigator.clipboard.writeText(container.innerHTML).then(
+                function(){
+                    alert("Copiado para a área de transferência!");
+                })
+                .catch(err => function() {
+                        alert(`Erro ao copiar!: ${err}`);
+                    });
+        }
+    }
+</script>
 </body>
 </html>
