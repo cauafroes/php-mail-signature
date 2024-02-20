@@ -175,23 +175,23 @@ if (!file_exists($file)) {
     function copyToClipboard() {
         let container = document.getElementById('signature');
 
-        if (!navigator.clipboard){
-            let range = document.createRange();
-            window.getSelection().removeAllRanges();
-            range.selectNode(container);
-            window.getSelection().addRange(range);
-            document.execCommand('copy');
-            window.getSelection().removeAllRanges();
-            alert("Copiado para a área de transferência!");
-        } else{
-            navigator.clipboard.writeText(container.innerHTML).then(
+        //if (!navigator.clipboard){
+        let range = document.createRange();
+        window.getSelection().removeAllRanges();
+        range.selectNode(container);
+        window.getSelection().addRange(range);
+        document.execCommand('copy');
+        window.getSelection().removeAllRanges();
+        alert("Copiado para a área de transferência!");
+        /*} else{
+            navigator.clipboard.writeText(container.innerText).then(
                 function(){
                     alert("Copiado para a área de transferência!");
                 })
                 .catch(err => function() {
                         alert(`Erro ao copiar!: ${err}`);
                     });
-        }
+        }*/
     }
 </script>
 </body>

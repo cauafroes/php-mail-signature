@@ -11,7 +11,9 @@ $data['email'] = $_POST['email'] ?? null;
 $data['phone'] = $_POST['phone'] ?? null;
 $data['pass'] = $_POST['pass'] ?? null;
 
-$dotenv = Dotenv::createImmutable(__DIR__);
+//alterar aqui o local da env.
+$dir = (__DIR__);
+$dotenv = Dotenv::createImmutable($dir);
 $dotenv->safeLoad();
 $dotenv->required('PASSWORD')->notEmpty();
 
@@ -28,6 +30,6 @@ if (empty($data['name']) || empty($data['work']) || empty($data['email']) || emp
 
 if(session_status() === PHP_SESSION_NONE) session_start();
 
-$img = (new AutoSignature($data['name'], $data['work'], $data['email'], $data['phone'], $data['pass']))->genSignature();
+$img = (new AutoSignature($data['name'], $data['work'], $data['email'], $data['phone']))->genSignature();
 
 header('Location: view_signature.php?img='.$img.'.jpeg');

@@ -9,13 +9,11 @@ class AutoSignature{
     private string $work;
     private string $email;
     private string $phone;
-    private string $pass;
-    public function __construct($name, $work, $email, $phone, $pass){
+    public function __construct($name, $work, $email, $phone){
         $this->name = $name;
         $this->work = $work;
         $this->email = $email;
         $this->phone = $phone;
-        $this->pass = $pass;
     }
 
     /**
