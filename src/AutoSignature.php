@@ -2,8 +2,6 @@
 
 namespace Froes\Autosignature;
 
-use Dotenv\Dotenv;
-
 class AutoSignature{
     private string $name;
     private string $work;
@@ -28,8 +26,8 @@ class AutoSignature{
         imagefilledrectangle($gd, 0, 0, 423, 139, $colorWhite);
 
         //CARREGA FONTES
-        $font = './fonts/ubuntu.ttf';
-        $fontBold = './fonts/ubuntubold.ttf';
+        $font = '../fonts/ubuntu.ttf';
+        $fontBold = '../fonts/ubuntubold.ttf';
 
         //ESCREVE NA IMAGEM
         imagettftext($gd, 14, 0, 12, 35, $colorRed, $fontBold, $this->name);

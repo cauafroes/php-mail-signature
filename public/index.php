@@ -1,6 +1,6 @@
 <?php
 
-include 'vendor/autoload.php';
+include '../vendor/autoload.php';
 
 use Dotenv\Dotenv;
 use Froes\Autosignature\AutoSignature;
@@ -12,12 +12,14 @@ $data['phone'] = $_POST['phone'] ?? null;
 $data['pass'] = $_POST['pass'] ?? null;
 
 //alterar aqui o local da env.
-$dir = (__DIR__);
+$dir = (__DIR__.'/../');
+echo $dir;
+
 $dotenv = Dotenv::createImmutable($dir);
 $dotenv->safeLoad();
 $dotenv->required('PASSWORD')->notEmpty();
 
-if (!empty($data['pass']) && $data['pass'] != $_ENV['PASSWORD']) {
+if (empty($data['pass']) || $data['pass'] != $_ENV['PASSWORD']) {
     header("Status: 301 Moved Permanently");
     header('Location: form.php'.'?error=1');
     return;
