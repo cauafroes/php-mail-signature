@@ -17,7 +17,7 @@ class AutoSignature{
     /**
     * @return array|string
     */
-    public function genSignature(): array|string
+    public function genSignature(): string
     {
         //CRIAR FOTO COM FUNDO BRANCO
         $gd = imagecreate(423, 139);
