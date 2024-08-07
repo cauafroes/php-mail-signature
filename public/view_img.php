@@ -20,7 +20,6 @@ if (!file_exists($file)) {
 
 ?>
 
-
 <!doctype html>
 <html lang="en">
 
@@ -115,7 +114,7 @@ if (!file_exists($file)) {
             </tr>
         </table>
         <br>
-        <img src="footer.png" alt="">
+        <img src="https://grupoaguia.com/footer.png" alt="">
         <br>
         <strong>IMPORTANTE:</strong>
         <br>

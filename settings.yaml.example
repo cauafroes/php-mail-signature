@@ -1,0 +1,11 @@
+#Inserir as configurações referentes a senha de cada empresa, exemplo:
+
+password:
+  company: coolCompanyName
+  type: text
+  file: companyTemplateFile
+
+password2:
+  company: coolCompanyNameWithImage
+  type: image
+  file: imageGeneratingCode.php

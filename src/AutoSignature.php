@@ -2,49 +2,89 @@
 
 namespace Froes\Autosignature;
 
+use Symfony\Component\Yaml\Yaml;
+
 class AutoSignature{
-    private string $name;
-    private string $work;
-    private string $email;
-    private string $phone;
-    public function __construct($name, $work, $email, $phone){
-        $this->name = $name;
-        $this->work = $work;
-        $this->email = $email;
-        $this->phone = $phone;
+    public function __construct(private readonly array $data, private readonly array $companyData){
     }
 
     /**
-    * @return array|string
-    */
-    public function genSignature(): string
+     * @return string|null
+     * @throws \Exception
+     */
+    public function genSignature(): string|null
     {
-        //CRIAR FOTO COM FUNDO BRANCO
-        $gd = imagecreate(423, 139);
-        $colorWhite = imagecolorallocate($gd, 255, 255, 255);
-        $colorRed = imagecolorallocate($gd, 255, 0, 0);
-        imagefilledrectangle($gd, 0, 0, 423, 139, $colorWhite);
-
-        //CARREGA FONTES
-        $font = '../fonts/ubuntu.ttf';
-        $fontBold = '../fonts/ubuntubold.ttf';
-
-        //ESCREVE NA IMAGEM
-        imagettftext($gd, 14, 0, 12, 35, $colorRed, $fontBold, $this->name);
-        imagettftext($gd, 11, 0, 12, 55, $colorRed, $font, $this->work);
-        imagettftext($gd, 11, 0, 12, 90, $colorRed, $font, $this->email);
-        imagettftext($gd, 11, 0, 12, 112, $colorRed, $font, $this->phone);
-        imagettftext($gd, 11, 0, 12, 133, $colorRed, $font, 'www.clubedeferias.com');
-        imageline($gd, 12, 66, 390, 66, $colorRed);
-
-        //SALVA IMAGEM
-        $fileName = str_replace(' ', '_', $this->name) . '_' . date('YmdHis') . '_' . rand(1000, 9999);
-        if (!file_exists('./images/')) {
-            mkdir('./images/', 0777, true);
+        if ($this->companyData['type'] == 'text') {
+            return $this->genHtml();
         }
-        imagejpeg($gd, './images/'.$fileName.'.jpeg', 100);
-        imagedestroy($gd);
+            return $this->genImage();
+    }
 
-        return $fileName;
+    public function genImage()
+    {
+        //todo
+    }
+
+    public function genHtml()
+    {
+        $path = __DIR__ . '/templates/' . $this->companyData['file'];
+
+        $fileExists = file_exists($path);
+
+        if (!$fileExists) {
+            throw new \Exception('Template não encontrada!');
+        }
+
+        $htmlData = file_get_contents($path);
+
+        foreach ($this->data as $key => $value) {
+            $htmlData = str_replace("$$key", $value, $htmlData);
+        }
+
+        return $htmlData;
+    }
+
+    public static function validateData(): array
+    {
+        $fields = ['name', 'work', 'email', 'phone', 'pass'];
+
+        if (empty($_POST['pass'])){
+            header("Status: 301 Moved Permanently");
+            header('Location: form.php?error=2');
+            exit();
+        }
+
+        foreach ($fields as $field) {
+            if (empty($_POST[$field])){
+                header("Status: 301 Moved Permanently");
+                header('Location: form.php?error=3');
+                exit();
+            }
+
+            $data[$field] = $_POST[$field];
+        }
+
+        return $data;
+    }
+
+    public static function getYaml(string $pass)
+    {
+        $exists = file_exists(__DIR__.'/../settings.yaml');
+
+        if (!$exists) {
+            header("Status: 301 Moved Permanently");
+            header('Location: form.php?error=4');
+            exit();
+        }
+
+        $data = Yaml::parseFile(__DIR__.'/../settings.yaml');
+
+        if (!array_key_exists($pass, $data)) {
+            header("Status: 301 Moved Permanently");
+            header('Location: form.php?error=1');
+            exit();
+        }
+
+        return $data[$pass];
     }
 }

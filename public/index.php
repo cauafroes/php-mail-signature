@@ -2,41 +2,28 @@
 
 include '../vendor/autoload.php';
 
-use Dotenv\Dotenv;
 use Froes\Autosignature\AutoSignature;
+use JetBrains\PhpStorm\NoReturn;
 
-$data['name'] = $_POST['name'] ?? null;
-$data['work'] = $_POST['funcao'] ?? null;
-$data['email'] = $_POST['email'] ?? null;
-$data['phone'] = $_POST['phone'] ?? null;
-$data['pass'] = $_POST['pass'] ?? null;
+$data = AutoSignature::validateData();
+$companyYamlData = AutoSignature::getYaml($data['pass']);
 
-//alterar aqui o local da env.
-$dir = (__DIR__.'/../');
-
-$dotenv = Dotenv::createImmutable($dir);
-$dotenv->safeLoad();
-$dotenv->required('PASSWORD')->notEmpty();
-
-if (empty($data['pass'])){
-    header("Status: 301 Moved Permanently");
-    header('Location: form.php');
-    return;
-}
-
-if ($data['pass'] != $_ENV['PASSWORD']) {
-    header("Status: 301 Moved Permanently");
-    header('Location: form.php'.'?error=1');
-    return;
-}
-
-if (empty($data['name']) || empty($data['work']) || empty($data['email']) || empty($data['phone'])) {
-	header('Location: form.php');
-	return;
-}
 
 if(session_status() === PHP_SESSION_NONE) session_start();
 
-$img = (new AutoSignature($data['name'], $data['work'], $data['email'], $data['phone']))->genSignature();
+try {
+    $signature = (new AutoSignature($data, $companyYamlData))->genSignature();
 
-header('Location: view_signature.php?img='.$img.'.jpeg');
+    include_once __DIR__.'/../src/view_html.php';
+} catch (\Exception $e) {
+    //todo: error handling
+    echo $e->getMessage();
+    exit();
+}
+
+#[NoReturn] function dd($data): void
+{
+    header('Content-Type: application/json');
+    echo json_encode($data);
+    exit();
+}

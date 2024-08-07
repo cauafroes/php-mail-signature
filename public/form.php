@@ -56,7 +56,7 @@
 		<input type="text" id="name" name="name" placeholder="Digite seu nome">
 
 		<label for="funcao">Função</label>
-		<input type="text" id="funcao" name="funcao" placeholder="Sua função">
+		<input type="text" id="funcao" name="work" placeholder="Sua função">
 
 		<label for="phone">Telefone</label>
 		<input type="text" id="phone" name="phone" placeholder="Seu telefone">
@@ -68,11 +68,23 @@
         <br>
 
         <label for="password">Senha</label>
-        <?php if(isset($_GET['error'])): ?>
-            <h5 style="color: #f50000; font-weight: normal; margin: 10px 0 10px 0;">Senha incorreta</h5>
-        <?php endif; ?>
-        <input type="password" id="password" name="pass" placeholder="Qual a senha para utilizar este serviço?">
+        <?php if (isset($_GET['error'])) {
+            $errorMessages = [
+                1 => "Senha incorreta",
+                2 => "Senha não informada",
+                3 => "Preencha todos os campos",
+                4 => "Erro ao carregar configurações"
+            ];
 
+            $error = (int)$_GET['error'];
+
+            $errorMessage = $errorMessages[$error] ?? 'Ocorreu um erro';
+
+            echo '<h5 style="color: #f50000; font-weight: normal; margin: 10px 0;">' . $errorMessage . '</h5>';
+        }
+        ?>
+
+        <input type="password" id="password" name="pass" placeholder="Qual a senha para utilizar este serviço?">
 		<input type="submit" value="Enviar">
 	</form>
 </div>
